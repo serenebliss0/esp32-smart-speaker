@@ -1,181 +1,344 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wavelet Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wavelet Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1 class="logo">wavelet</h1>
-    </header>
+  <div id="app" class="app-shell">
+    <div id="frame-label" class="frame-label">WiFi streaming</div>
 
-    <main id="dashboard-view" class="dashboard-grid">
-        <div class="column left-col">
-            <div class="card now-playing">
-                <div class="section-title">NOW PLAYING</div>
-                <div class="track-info">
-                    <img id="album-art" src="https://via.placeholder.com/150" alt="Album Art">
-                    <div class="details">
-                        <h2 id="track-title">Loading...</h2>
-                        <p id="connection-status">Connected via WiFi</p>
-                    </div>
-                </div>
-                <div class="progress-container">
+    <section id="goodbye-view" class="goodbye-view hidden" aria-live="polite">
+      <h1 class="brand">wavelet</h1>
+      <div class="goodbye-copy">
+        <h2>See you next time : )</h2>
+        <p>P.S You can close this tab now</p>
+      </div>
+    </section>
+
+    <section id="dashboard-view" class="page dashboard-page">
+      <header class="topbar">
+        <h1 class="brand">wavelet</h1>
+        <div id="mic-status" class="mic-status hidden">
+          <span id="mic-dot" class="status-dot"></span>
+          <div>
+            <strong id="mic-status-label">Microphone is on</strong>
+            <small id="mic-status-subtitle" class="hidden">Smart Assistant can't hear you</small>
+          </div>
+        </div>
+        <p id="quick-warning" class="quick-warning hidden">Quick settings are unavailable in AUX mode</p>
+      </header>
+
+      <main class="dashboard-grid">
+        <div class="stack main-stack">
+          <article class="card now-playing-card">
+            <p class="eyebrow">Now Playing</p>
+            <div class="now-playing-body">
+              <div class="album-art" aria-hidden="true">
+                <svg viewBox="0 0 120 120" role="img">
+                  <rect width="120" height="120" rx="24" fill="#f9f8fb"/>
+                  <path d="M4 78c20-14 34-12 48-1 16 12 34 12 64-5v48H4z" fill="#22336f" opacity=".92"/>
+                  <path d="M18 48c16-28 48-34 77-19 14 7 20 19 14 31-7 14-31 16-45 5-17-13-26 0-46-17z" fill="#fff"/>
+                  <path d="M35 38c-7 0-13 5-13 12 0 6 5 11 12 11 8 0 15-6 15-13 0-6-6-10-14-10z" fill="#22336f"/>
+                  <circle cx="36" cy="48" r="4" fill="#fff"/>
+                  <path d="M56 54c13 5 29 4 42-4" fill="none" stroke="#22336f" stroke-width="4" stroke-linecap="round"/>
+                  <path d="M24 88h72M20 96h78M28 104h62" stroke="#fff" stroke-width="5" opacity=".9"/>
+                </svg>
+              </div>
+
+              <div class="track-panel">
+                <h2 id="track-title">Hype Boy — NewJeans</h2>
+                <p id="connection-status">Connected via WiFi</p>
+
+                <div class="track-progress">
+                  <div class="progress-track" aria-hidden="true">
+                    <span id="track-fill"></span>
+                  </div>
+                  <div class="time-row">
                     <span id="time-current">0:00</span>
-                    <input type="range" id="track-progress" value="0" max="100">
                     <span id="time-total">2:59</span>
+                  </div>
                 </div>
-                <div class="controls">
-                    <button id="btn-prev"><i class="fas fa-backward"></i></button>
-                    <button id="btn-play-pause" class="play-btn"><i class="fas fa-pause"></i></button>
-                    <button id="btn-next"><i class="fas fa-forward"></i></button>
-                </div>
-            </div>
 
-            <div class="card volume-card">
-                <div class="section-title">VOLUME</div>
-                <div class="slider-group">
-                    <input type="range" id="volume-slider" value="67" max="100">
-                    <span id="volume-label" class="bold-value">67%</span>
+                <div class="player-controls" aria-label="Playback controls">
+                  <button id="btn-prev" class="round-control" type="button" aria-label="Previous track">
+                    <svg viewBox="0 0 24 24"><path d="M7 6v12M18 7l-8 5 8 5z"/></svg>
+                  </button>
+                  <button id="btn-play-pause" class="round-control play-control" type="button" aria-label="Pause">
+                    <svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg>
+                  </button>
+                  <button id="btn-next" class="round-control" type="button" aria-label="Next track">
+                    <svg viewBox="0 0 24 24"><path d="M17 6v12M6 7l8 5-8 5z"/></svg>
+                  </button>
                 </div>
-                <div id="volume-overlay" class="overlay hidden">Volume controls are not available in this mode</div>
+              </div>
             </div>
+          </article>
 
-            <div class="card battery-card">
-                <div class="section-title">BATTERY PERCENTAGE</div>
-                <div class="slider-group">
-                    <input type="range" id="battery-level" value="1" max="100" disabled>
-                    <span id="battery-label" class="bold-value">1%</span>
-                </div>
+          <article id="volume-card" class="card meter-card">
+            <p class="eyebrow">Volume</p>
+            <div id="volume-unavailable" class="unavailable hidden">Volume controls are not available in this mode</div>
+            <div id="volume-control" class="meter-row">
+              <input id="volume-slider" type="range" min="0" max="100" value="67" aria-label="Volume">
+              <strong id="volume-label">67%</strong>
             </div>
+          </article>
+
+          <article class="card meter-card">
+            <p class="eyebrow">Battery Percentage</p>
+            <div class="meter-row">
+              <div class="readonly-meter"><span id="battery-fill"></span></div>
+              <strong id="battery-label">1%</strong>
+            </div>
+          </article>
         </div>
 
-        <div class="column right-col">
-            <div id="mic-status-container" class="status-indicator hidden">
-                <span class="dot green" id="mic-dot"></span> 
-                <div class="mic-text">
-                    <span id="mic-status-text">Microphone is on</span>
-                    <small id="mic-subtext" class="hidden">Smart Assistant can't hear you</small>
-                </div>
+        <aside class="stack side-stack">
+          <article class="card quick-card">
+            <p class="eyebrow">Quick Settings</p>
+            <div class="quick-row" aria-label="Quick settings">
+              <button id="quick-wifi" class="icon-chip active" type="button" aria-label="WiFi">
+                <svg viewBox="0 0 24 24"><path d="M3 9c5.8-4.6 12.2-4.6 18 0M6.5 12.5c3.6-2.7 7.4-2.7 11 0M10 16c1.4-.9 2.6-.9 4 0M12 19h.01"/></svg>
+              </button>
+              <button id="quick-bluetooth" class="icon-chip active" type="button" aria-label="Bluetooth">
+                <svg viewBox="0 0 24 24"><path d="M7 7l10 10-5 4V3l5 4L7 17"/></svg>
+              </button>
+              <button id="quick-mic" class="icon-chip" type="button" aria-label="Microphone">
+                <svg viewBox="0 0 24 24"><path d="M12 14a4 4 0 0 0 4-4V6a4 4 0 0 0-8 0v4a4 4 0 0 0 4 4zM5 10a7 7 0 0 0 14 0M12 17v4M8 21h8"/></svg>
+              </button>
+              <button id="open-settings" class="icon-chip pale" type="button" aria-label="Settings">
+                <svg viewBox="0 0 24 24"><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/><path d="M4 12l1.4-1.1-.3-1.8 1.8-3 1.8.7L10 5h4l1.3 1.8 1.8-.7 1.8 3-.3 1.8L20 12l-1.4 1.1.3 1.8-1.8 3-1.8-.7L14 19h-4l-1.3-1.8-1.8.7-1.8-3 .3-1.8z"/></svg>
+              </button>
+            </div>
+          </article>
+
+          <nav class="mode-card card" aria-label="Speaker mode">
+            <button class="mode-button" type="button" data-mode="0" data-name="Bluetooth">
+              <svg viewBox="0 0 24 24"><path d="M7 7l10 10-5 4V3l5 4L7 17"/></svg>
+              <span>Bluetooth</span>
+            </button>
+            <button class="mode-button" type="button" data-mode="1" data-name="Smart Assistant">
+              <svg viewBox="0 0 24 24"><path d="M12 14a4 4 0 0 0 4-4V6a4 4 0 0 0-8 0v4a4 4 0 0 0 4 4zM5 10a7 7 0 0 0 14 0M12 17v4M8 21h8"/></svg>
+              <span>Smart Assistant</span>
+            </button>
+            <button class="mode-button active" type="button" data-mode="2" data-name="WiFi Streaming">
+              <svg viewBox="0 0 24 24"><path d="M3 9c5.8-4.6 12.2-4.6 18 0M6.5 12.5c3.6-2.7 7.4-2.7 11 0M10 16c1.4-.9 2.6-.9 4 0M12 19h.01"/></svg>
+              <span>WiFi Streaming</span>
+            </button>
+            <button class="mode-button" type="button" data-mode="3" data-name="AUX Port">
+              <svg viewBox="0 0 24 24"><path d="M8 3h8v18H8zM11 6h2M12 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>
+              <span>AUX Port</span>
+            </button>
+          </nav>
+        </aside>
+      </main>
+    </section>
+
+    <section id="settings-view" class="page settings-page hidden">
+      <header class="settings-header">
+        <button id="brand-home" class="brand brand-link" type="button">wavelet</button>
+      </header>
+
+      <main class="settings-grid">
+        <aside class="settings-sidebar">
+          <article class="card quick-card settings-quick-card">
+            <p class="eyebrow">Quick Settings</p>
+            <div class="quick-row">
+              <button id="settings-wifi" class="icon-chip active" type="button" aria-label="WiFi">
+                <svg viewBox="0 0 24 24"><path d="M3 9c5.8-4.6 12.2-4.6 18 0M6.5 12.5c3.6-2.7 7.4-2.7 11 0M10 16c1.4-.9 2.6-.9 4 0M12 19h.01"/></svg>
+              </button>
+              <button id="settings-bluetooth" class="icon-chip active" type="button" aria-label="Bluetooth">
+                <svg viewBox="0 0 24 24"><path d="M7 7l10 10-5 4V3l5 4L7 17"/></svg>
+              </button>
+              <button id="power-button" class="icon-chip danger" type="button" aria-label="Power">
+                <svg viewBox="0 0 24 24"><path d="M12 3v9M7 6.8a7 7 0 1 0 10 0"/></svg>
+              </button>
+              <button id="settings-home" class="icon-chip pale" type="button" aria-label="Home">
+                <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10M9 20v-6h6v6"/></svg>
+              </button>
+            </div>
+          </article>
+
+          <nav class="card settings-nav" aria-label="Settings pages">
+            <button class="settings-tab active" type="button" data-tab="general">
+              <svg viewBox="0 0 24 24"><path d="M8 4v16M16 4v16M4 8h16M4 16h16"/></svg>
+              <span>General</span>
+            </button>
+            <button class="settings-tab" type="button" data-tab="connection">
+              <svg viewBox="0 0 24 24"><path d="M4 8h10a6 6 0 0 1 6 6v2M4 12h6a6 6 0 0 1 6 6M4 16h2a6 6 0 0 1 6 6"/></svg>
+              <span>Connection</span>
+            </button>
+            <button class="settings-tab" type="button" data-tab="about">
+              <svg viewBox="0 0 24 24"><path d="M12 17v-6M12 8h.01"/><circle cx="12" cy="12" r="9"/></svg>
+              <span>About Device</span>
+            </button>
+            <button class="settings-tab" type="button" data-tab="updates">
+              <svg viewBox="0 0 24 24"><path d="M8 3h8v18H8zM11 6h2M12 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>
+              <span>Software Updates</span>
+            </button>
+          </nav>
+        </aside>
+
+        <article class="settings-panel">
+          <div id="tab-general" class="settings-pane active">
+            <label class="field">
+              <span>Device Name</span>
+              <span class="pill-input"><input id="device-name" type="text" value="ESP32 Speaker"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+            </label>
+
+            <div class="toggle-grid">
+              <label class="toggle-field">
+                <span>Enable Startup Chime</span>
+                <input id="startup-chime" type="checkbox" checked>
+                <i></i>
+              </label>
+              <label class="toggle-field">
+                <span>Enable Startup Beep</span>
+                <input id="startup-beep" type="checkbox" checked>
+                <i></i>
+              </label>
             </div>
 
-            <div class="card quick-settings">
-                <div class="section-title">Quick Settings</div>
-                <div class="icon-row">
-                    <button id="qs-wifi" class="icon-btn active"><i class="fas fa-wifi"></i></button>
-                    <button id="qs-bt" class="icon-btn"><i class="fab fa-bluetooth-b"></i></button>
-                    <button id="qs-mic" class="icon-btn"><i class="fas fa-microphone"></i></button>
-                    <button id="qs-settings" class="icon-btn"><i class="fas fa-cog"></i></button>
-                </div>
+            <label class="field">
+              <span>Default mode on startup</span>
+              <span class="pill-input select-pill">
+                <select id="default-mode">
+                  <option value="0">Bluetooth</option>
+                  <option value="2">WIFI</option>
+                  <option value="1">Smart Assistant</option>
+                  <option value="3">AUX Mode</option>
+                </select>
+                <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+              </span>
+            </label>
+
+            <div class="theme-field">
+              <span>Themes</span>
+              <div class="theme-grid">
+                <button class="theme-option active" type="button" data-theme="default"><i></i><span>Default</span></button>
+                <button class="theme-option" type="button" data-theme="light"><i></i><span>Light</span></button>
+                <button class="theme-option" type="button" data-theme="dark"><i></i><span>Dark</span></button>
+                <button class="theme-option" type="button" data-theme="blue"><i></i><span>Blue</span></button>
+                <button class="theme-option" type="button" data-theme="blackpink"><i></i><span>BLACKPINK</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div id="tab-connection" class="settings-pane">
+            <label class="field">
+              <span>Your Device is visible as:</span>
+              <span class="pill-input"><input id="visible-name" type="text" value="ESP32 Speaker"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+            </label>
+            <div class="split-fields">
+              <label class="field">
+                <span>WIFI Network Name:</span>
+                <span class="pill-input"><input id="wifi-name" type="text" value="ESP32 Speaker STA"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+              </label>
+              <label class="field">
+                <span>mDNS Hostname:</span>
+                <span class="pill-input muted-pill"><input id="mdns-name" type="text" value="wavelet.local" readonly></span>
+              </label>
+            </div>
+            <label class="field">
+              <span>WIFI Network Password:</span>
+              <span class="pill-input"><input id="wifi-password" type="text" value="12345678"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+            </label>
+            <label class="field">
+              <span>Connected Wi-Fi name</span>
+              <span class="pill-input"><input id="connected-wifi" type="text" value="ESP32 Speaker STA"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+            </label>
+            <label class="field">
+              <span>Connected Wi-Fi password</span>
+              <span class="pill-input"><input id="connected-password" type="password" value="12345678"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+            </label>
+          </div>
+
+          <div id="tab-about" class="settings-pane">
+            <div class="about-grid">
+              <label class="field wide">
+                <span>Device Name</span>
+                <span class="pill-input muted-pill"><input type="text" value="ESP32 Speaker" readonly></span>
+              </label>
+              <label class="field">
+                <span>Firmware Version</span>
+                <span class="pill-input muted-pill"><input type="text" value="Version 1.0.0" readonly><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+              </label>
+              <label class="field">
+                <span>Device Model</span>
+                <span class="pill-input muted-pill"><input type="text" value="DoIT ESP32 DevKit V1" readonly></span>
+              </label>
+              <label class="field">
+                <span>Bluetooth MAC Address</span>
+                <span class="pill-input muted-pill"><input type="text" value="FF:FF:FF:FF:FF:FF" readonly></span>
+              </label>
+              <label class="field">
+                <span>WiFi MAC Address</span>
+                <span class="pill-input muted-pill"><input type="text" value="FF:FF:FF:FF:FF:FF" readonly></span>
+              </label>
+              <label class="field">
+                <span>WiFi IP Address</span>
+                <span class="pill-input"><input type="text" value="192.168.0.100" readonly></span>
+              </label>
+              <label class="field wide">
+                <span>Uptime</span>
+                <span class="pill-input muted-pill"><input id="uptime" type="text" value="02:27:54" readonly></span>
+              </label>
+            </div>
+          </div>
+
+          <div id="tab-updates" class="settings-pane updates-pane">
+            <div id="updates-check" class="update-state active">
+              <label class="field">
+                <span>Firmware Version</span>
+                <span class="pill-input muted-pill"><input type="text" value="Version 1.0.0" readonly></span>
+              </label>
+              <div class="split-fields">
+                <label class="field">
+                  <span>IP Address</span>
+                  <span class="pill-input muted-pill"><input type="text" value="192.168.1.100" readonly></span>
+                </label>
+                <label class="field">
+                  <span>mDNS Hostname:</span>
+                  <span class="pill-input muted-pill"><input type="text" value="wavelet.local" readonly></span>
+                </label>
+              </div>
+              <button id="check-updates" class="green-action" type="button">Check for Updates <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+              <small>*Updates usually take 5-10 minutes</small>
             </div>
 
-            <button class="mode-btn" id="mode-bt"><i class="fab fa-bluetooth-b"></i> Bluetooth</button>
-            <button class="mode-btn" id="mode-smart"><i class="fas fa-microphone"></i> Smart Assistant</button>
-            <button class="mode-btn active" id="mode-wifi"><i class="fas fa-wifi"></i> WiFi Streaming</button>
-            <button class="mode-btn" id="mode-aux"><i class="fas fa-hdd"></i> AUX Port</button>
-        </div>
-    </main>
-
-    <main id="settings-view" class="dashboard-grid hidden">
-        <div class="column left-col">
-            <div class="card quick-settings">
-                <div class="section-title">Quick Settings</div>
-                <div class="icon-row">
-                    <button class="icon-btn active"><i class="fas fa-wifi"></i></button>
-                    <button class="icon-btn"><i class="fab fa-bluetooth-b"></i></button>
-                    <button class="icon-btn danger"><i class="fas fa-power-off"></i></button>
-                    <button id="qs-home" class="icon-btn"><i class="fas fa-home"></i></button>
-                </div>
+            <div id="updates-upload" class="update-state">
+              <button id="update-wifi" class="green-action" type="button">Update over WiFi <svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+              <small>*Updates usually take 5-10 minutes</small>
+              <label class="field firmware-upload">
+                <span>Upload Firmware Locally</span>
+                <span class="pill-input">
+                  <input id="firmware-file-label" type="text" value="Upload your *.bin firmware" readonly>
+                  <input id="firmware-file" type="file" accept=".bin" hidden>
+                  <button id="firmware-picker" type="button" aria-label="Choose firmware file">
+                    <svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>
+                  </button>
+                </span>
+              </label>
+              <p>*Your speaker will automatically restart<br>after the software update completes</p>
             </div>
-            
-            <button class="mode-btn settings-tab active" data-target="tab-general"><i class="fas fa-th-large"></i> General</button>
-            <button class="mode-btn settings-tab" data-target="tab-connection"><i class="fas fa-cast"></i> Connection</button>
-            <button class="mode-btn settings-tab"><i class="fas fa-info-circle"></i> About Device</button>
-            <button class="mode-btn settings-tab"><i class="fas fa-box"></i> Software Updates</button>
-        </div>
+          </div>
+        </article>
+      </main>
+    </section>
+  </div>
 
-        <div class="column right-col">
-            <div class="card settings-content">
-                <div id="tab-general" class="settings-pane">
-                    <div class="input-group">
-                        <label>Device Name</label>
-                        <div class="input-box">
-                            <input type="text" value="ESP32 Speaker">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="toggle-row">
-                        <div class="toggle-group">
-                            <label>Enable Startup Chime</label>
-                            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-                        </div>
-                        <div class="toggle-group">
-                            <label>Enable Startup Beep</label>
-                            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-                        </div>
-                    </div>
+  <div id="wifi-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="wifi-modal-title">
+    <div class="modal-panel">
+      <h2 id="wifi-modal-title">You will be kicked off this page if you turn off WiFi!<br>Continue?</h2>
+      <div class="modal-actions">
+        <button id="logout-confirm" class="logout-button" type="button">Log Out</button>
+        <button id="logout-cancel" class="cancel-button" type="button">Cancel</button>
+      </div>
+    </div>
+  </div>
 
-                    <div class="input-group">
-                        <label>Default mode on startup</label>
-                        <div class="input-box">
-                            <select>
-                                <option>Bluetooth</option>
-                                <option>WIFI</option>
-                                <option>Smart Assistant</option>
-                                <option>AUX Mode</option>
-                            </select>
-                            <i class="fas fa-arrow-down"></i>
-                        </div>
-                    </div>
-
-                    <div class="themes-group">
-                        <label>Themes</label>
-                        <div class="theme-selector">
-                            <div class="theme-opt"><div class="theme-bubble default" data-theme="default"></div><span>Default</span></div>
-                            <div class="theme-opt"><div class="theme-bubble light" data-theme="light"></div><span>Light</span></div>
-                            <div class="theme-opt"><div class="theme-bubble dark" data-theme="dark"></div><span>Dark</span></div>
-                            <div class="theme-opt"><div class="theme-bubble blue" data-theme="blue"></div><span>Blue</span></div>
-                            <div class="theme-opt"><div class="theme-bubble blackpink" data-theme="blackpink"></div><span>BLACKPINK</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="tab-connection" class="settings-pane hidden">
-                    <div class="input-group">
-                        <label>Your Device is visible as:</label>
-                        <div class="input-box">
-                            <input type="text" value="ESP32 Speaker">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                    </div>
-                    <div class="two-col-inputs">
-                        <div class="input-group">
-                            <label>WIFI Network Name:</label>
-                            <div class="input-box">
-                                <input type="text" value="ESP32 Speaker STA">
-                                <i class="fas fa-arrow-right"></i>
-                            </div>
-                        </div>
-                        <div class="input-group">
-                            <label>mDNS Hostname:</label>
-                            <div class="input-box read-only">
-                                <span>wavelet.local</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label>WIFI Network Password:</label>
-                        <div class="input-box"><input type="password" value="12345678"><i class="fas fa-arrow-right"></i></div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </main>
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
