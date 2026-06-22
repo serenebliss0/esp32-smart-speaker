@@ -67,7 +67,7 @@ From the project header comments and `Config.h`:
 Audio / IO:
 - I2S BCLK: GPIO 26
 - I2S LRCLK: GPIO 25
-- I2S DATA (DIN to amp): GPIO 4 (note: main header comment still mentions GPIO 22)
+- I2S DATA (DIN to amp): GPIO 4
 - Buzzer: GPIO 27
 - Volume potentiometer: GPIO 34
 
@@ -114,7 +114,7 @@ pip install platformio
 
 ### 3) Build firmware
 ```bash
-cd /home/runner/work/esp32-smart-speaker/esp32-smart-speaker
+cd <project_root>
 python -m platformio run -e mini
 ```
 
@@ -173,7 +173,7 @@ This project currently includes hardcoded Wi-Fi credentials in `/src/wifi/WiFiMa
 ## Known project state and limitations
 
 - BLE battery service initialization in `main.cpp` is currently commented out.
-- The web UI is actively evolving; `data/script.js` appears to reference older DOM IDs than the current `index.html` markup.
+- The web UI is actively evolving and undergoing active iteration.
 - `AudioManager.cpp` embeds large raw sound arrays, so compile times and file size are significant.
 
 ---
