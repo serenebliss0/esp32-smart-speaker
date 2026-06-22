@@ -2,6 +2,8 @@
 
 An ESP32-based smart speaker firmware project that combines Bluetooth A2DP playback, physical controls, battery telemetry, and a browser-based control dashboard served from SPIFFS.
 
+> **⚠️ SECURITY WARNING:** The current source includes hardcoded Wi-Fi credentials in `/src/wifi/WiFiManager.cpp`. Change these immediately before flashing to real hardware.
+
 ## What this repository contains
 
 This repo is a PlatformIO Arduino project for a multi-mode ESP32 speaker called **Wavelet**.
@@ -122,6 +124,9 @@ python -m platformio run -e mini
 Use `regular` or `max` instead of `mini` as needed.
 
 ### 4) Upload firmware
+
+> **Important:** Do not flash without first replacing hardcoded Wi-Fi credentials in `/src/wifi/WiFiManager.cpp`.
+
 ```bash
 python -m platformio run -e mini -t upload
 ```
@@ -175,7 +180,7 @@ NVS (Preferences) keys currently used:
 
 - BLE battery service initialization in `main.cpp` is currently commented out.
 - The web UI is actively evolving.
-- `data/script.js` still contains selectors/events that do not fully match the latest `index.html` IDs/class names.
+- `data/script.js` still contains selectors/events that do not fully match the latest `index.html` IDs/class names, so parts of the dashboard may not work correctly until synchronized.
 - `AudioManager.cpp` embeds large raw sound arrays, so compile times and file size are significant.
 
 ---
