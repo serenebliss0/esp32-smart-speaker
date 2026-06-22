@@ -65,6 +65,7 @@ Mode button cycles through all four modes in order.
 From the project header comments and `Config.h`:
 
 Audio / IO:
+- I2S peripheral: I2S0 (`I2S_NUM_0`)
 - I2S BCLK: GPIO 26
 - I2S LRCLK: GPIO 25
 - I2S DATA (DIN to amp): GPIO 4
@@ -163,7 +164,7 @@ NVS (Preferences) keys currently used:
 
 ## Security and configuration notes
 
-**SECURITY WARNING:** This project currently includes hardcoded Wi-Fi credentials in `/src/wifi/WiFiManager.cpp` (STA and AP). If flashed as-is, nearby users may be able to discover or join exposed network settings. Change these credentials immediately before any deployment. Before deploying or sharing binaries:
+**SECURITY WARNING:** This project currently includes hardcoded Wi-Fi credentials in `/src/wifi/WiFiManager.cpp` (STA and AP). If flashed as is, nearby users may be able to discover or join exposed network settings. Change these credentials immediately before any deployment. Before deploying or sharing binaries:
 - Replace with your own values
 - Avoid committing personal credentials
 - Prefer runtime provisioning or secure storage
@@ -194,6 +195,7 @@ NVS (Preferences) keys currently used:
 ## Future improvements (suggested)
 
 - Move credentials to secure provisioning flow
+- Prioritize synchronizing `data/script.js` selectors/events with current `index.html` structure
 - Add unit tests under `/test`
 - Split large embedded audio arrays into generated assets or flash-friendly resource handling
 - Add OTA update pipeline and release versioning workflow
