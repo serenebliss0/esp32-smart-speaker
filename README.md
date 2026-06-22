@@ -169,7 +169,7 @@ NVS (Preferences) keys currently used:
 
 ## Security and configuration notes
 
-**SECURITY WARNING:** This project currently includes hardcoded Wi-Fi credentials in `/src/wifi/WiFiManager.cpp` (STA and AP). If flashed as is, nearby users may be able to discover or join exposed network settings. Change these credentials immediately before any deployment. Before deploying or sharing binaries:
+The repository currently includes hardcoded Wi-Fi credentials in `/src/wifi/WiFiManager.cpp` (STA and AP). If flashed as is, nearby users may be able to discover or join exposed network settings. Before deploying or sharing binaries:
 - Replace with your own values
 - Avoid committing personal credentials
 - Prefer runtime provisioning or secure storage
@@ -180,7 +180,7 @@ NVS (Preferences) keys currently used:
 
 - BLE battery service initialization in `main.cpp` is currently commented out.
 - The web UI is actively evolving.
-- `data/script.js` still contains selectors/events that do not fully match the latest `index.html` IDs/class names, so parts of the dashboard may not work correctly until synchronized.
+- **Known bug:** `data/script.js` still contains selectors/events that do not fully match the latest `index.html` IDs/class names, so parts of the dashboard may not work correctly until synchronized.
 - `AudioManager.cpp` embeds large raw sound arrays, so compile times and file size are significant.
 
 ---
