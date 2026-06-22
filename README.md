@@ -163,7 +163,7 @@ NVS (Preferences) keys currently used:
 
 ## Security and configuration notes
 
-This project currently includes hardcoded Wi-Fi credentials in `/src/wifi/WiFiManager.cpp` (STA and AP). Before deploying or sharing binaries:
+This project currently includes hardcoded Wi-Fi credentials in `/src/wifi/WiFiManager.cpp` (STA and AP). If flashed as-is, nearby users may be able to discover or join exposed network settings. Before deploying or sharing binaries:
 - Replace with your own values
 - Avoid committing personal credentials
 - Prefer runtime provisioning or secure storage
@@ -173,7 +173,7 @@ This project currently includes hardcoded Wi-Fi credentials in `/src/wifi/WiFiMa
 ## Known project state and limitations
 
 - BLE battery service initialization in `main.cpp` is currently commented out.
-- The web UI is actively evolving and undergoing active iteration.
+- The web UI is actively evolving.
 - `AudioManager.cpp` embeds large raw sound arrays, so compile times and file size are significant.
 
 ---
