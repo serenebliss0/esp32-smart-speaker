@@ -4,5 +4,12 @@
 	(generator_version "9.0")
 	(uuid "0c3772f6-de72-4c77-9f16-5e9ca2dd1615")
 	(paper "A4")
+	(title_block
+		(title "Wavelet Speaker")
+		(date "2026-03-12")
+		(rev "1.0.0")
+		(company "Semire Designs")
+		(comment 1 "Available in Mini, Regular, Max")
+	)
 	(lib_symbols)
 )

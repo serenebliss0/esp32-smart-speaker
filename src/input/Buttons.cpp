@@ -31,6 +31,7 @@ void handlePowerButton() {
       #ifdef DEBUG
       Serial.println("Long press - shutting down!");
       #endif
+
       audio.play_shutdown_sound();
       a2dp_sink.end(); // gracefully disconnect Bluetooth
       delay(500);

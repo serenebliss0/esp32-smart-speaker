@@ -33,10 +33,18 @@
 #include "audio/AudioManager.h"
 #include "ble/BLEManager.h"
 #include "core/Speaker.h"
+
+#if defined(WAVELET_REGULAR)
 #include "input/Buttons.h"
+#endif
+
 #include "storage/PreferencesManager.h"
+
+#ifdef WAVELET_MAX
 #include "web/WebServer.h"
 #include "wifi/WiFiManager.h"
+#endif
+
 #include "Config.h"
 
 Preferences prefs;
@@ -52,8 +60,10 @@ BluetoothA2DPSink a2dp_sink;
 
 #define FIRMWARE_VERSION "1.0.0"
 
+#if defined(WAVELET_MINI) || defined(WAVELET_REGULAR)
 #ifdef BATTERIES_CONNECTED
 #define BATTERY_PIN 35
+#endif
 #endif
 
 void setup() {
@@ -74,14 +84,17 @@ void setup() {
 
     prefs.begin("app", false); // open once
 
+    #if defined(WAVELET_MINI) || defined(WAVELET_REGULAR)
+
     pinMode(Config::BUZZER, OUTPUT);
-
-  pinMode(Config::PWR_BUTTON, INPUT_PULLUP);
-  pinMode(Config::MODE_BUTTON, INPUT_PULLUP);
-  pinMode(Config::PREVIOUS_BUTTON, INPUT_PULLUP);
-  pinMode(Config::NEXT_BUTTON, INPUT_PULLUP);
-  pinMode(Config::PAUSE_BUTTON, INPUT_PULLUP);
-
+    
+    pinMode(Config::PWR_BUTTON, INPUT_PULLUP);
+    pinMode(Config::MODE_BUTTON, INPUT_PULLUP);
+    pinMode(Config::PREVIOUS_BUTTON, INPUT_PULLUP);
+    pinMode(Config::NEXT_BUTTON, INPUT_PULLUP);
+    pinMode(Config::PAUSE_BUTTON, INPUT_PULLUP);
+    
+    #endif
   /*
       // Initialize BLE for battery level
   BLEDevice::init("Serenity's ESP32");
@@ -120,28 +133,58 @@ void setup() {
     a2dp_sink.set_pin_config(my_pins);
     a2dp_sink.set_on_connection_state_changed(on_connected);
     a2dp_sink.set_auto_reconnect(false);
+
+    #ifdef WAVELET_MAX
     getSongMetadata(); //achieve song info for the web ui
-    a2dp_sink.start("ESP32 Speaker");
+    #endif
 
+    #ifdef WAVELET_MINI
+    a2dp_sink.start("Wavelet Mini");
+    #endif
 
+    #ifdef WAVELET_REGULAR
+    a2dp_sink.start("Wavelet");
+    #endif
+
+    #ifdef WAVELET_MAX
+    a2dp_sink.start("Wavelet Max");
+    #endif
+
+  
     audio.play_startup_sound();
 
     int rememberedVolume = readRememberedVolume();
     a2dp_sink.set_volume(rememberedVolume);
     //i2s_set_clk(I2S_NUM_0, 44100, I2S_BITS_PER_SAMPLE_16BIT, I2S_CHANNEL_STEREO);
     audio.buzz(1000,1000);
+
+    #ifdef WAVELET_MAX
+    connectWiFi();
+    delay(5000);
+    startWebServer();
+    getSongMetadata();
+    #endif
 }
 
 void loop() {
   String serial_input_args = Serial.readStringUntil('\n');
   serial_input_args.trim(); // remove newline
   audio.updateVolume();
+
+  #if defined(WAVELET_REGULAR) || defined(WAVELET_MINI)
+  #ifdef DEBUG
+  int battery_level = readBatteryLevel();
+  Serial.println(battery_level);
+  #endif
   update_battery();
+  #endif
+
+  #ifdef WAVELET_REGULAR
   checkModeButton();
   handlePowerButton();
   handlePreviousButton();
   handleNextButton();
-
+  #endif
   //MDNS.update();
 
   if (serial_input_args == "volume")

@@ -20,23 +20,13 @@ bool serverStarted = false; //this is so the WIFI memory leak stops (i hope)
 AsyncWebServer server(80);
 
 void startWebServer() {
-  connectWiFi();
 
   SPIFFS.begin(true); // format if first time
 
-  // DEBUG: list all files on SPIFFS
-  #ifdef DEBUG
-  File root = SPIFFS.open("/");
-  File file = root.openNextFile();
-  while(file) {
-    Serial.print("SPIFFS file: ");
-    Serial.println(file.name());
-    file = root.openNextFile();
-  }
-  #endif
+
 
   // Serve files
-  server.serveStatic("/index.html", SPIFFS, "/index.html");
+  server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
   server.serveStatic("/styles.css", SPIFFS, "/styles.css");
   server.serveStatic("/script.js",  SPIFFS, "/script.js");
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *r){
@@ -71,11 +61,26 @@ server.on("/battery", HTTP_GET, [](AsyncWebServerRequest *r){
   r->send(200, "text/plain", String(readBatteryLevel()));
 });
 
+server.on("/ping", HTTP_GET, [](AsyncWebServerRequest *r){
+  r->send(200, "text/plain", "OK");
+});
+
   Serial.print("Free heap before server: ");
   Serial.println(ESP.getFreeHeap());
 
   server.begin();
 
+  // DEBUG: list all files on SPIFFS
+  #ifdef DEBUG
+  File root = SPIFFS.open("/");
+  File file = root.openNextFile();
+  while(file) {
+    Serial.print("SPIFFS file: ");
+    Serial.println(file.name());
+    file = root.openNextFile();
+  }
+  #endif
+  
 }
 
 void getSongMetadata() {

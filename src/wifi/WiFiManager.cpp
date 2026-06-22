@@ -4,10 +4,10 @@
 #include <WiFi.h>
 #include <ESPmDNS.h>
 
-const char* staSSID = "MTN_4G_2CDDDC"; //im not leaking this again
-const char* staPassword = "DB27F0D5";
+const char* staSSID = "IZEHI_HOTSPOT4"; //im not leaking this again
+const char* staPassword = "semire ajayi";
 
-const char* apSSID = "ESP32_SPKR";
+const char* apSSID = "WAVELET_MAX";
 const char* apPassword = "12345678"; // needs 8+ chars
 
 void connectWiFi() {
