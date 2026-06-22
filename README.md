@@ -149,7 +149,7 @@ Control/API routes (`GET`):
 - `/previous`
 - `/volume?v=<0..127>`
 - `/mode?m=<0..3>`
-- `/battery` → plain text integer battery percent (for example `78`)
+- `/battery` → plain text integer battery percent (e.g., `78`)
 - `/nowplaying` → JSON object with `track` and `artist` fields
 
 ---
@@ -193,7 +193,7 @@ This project currently includes hardcoded Wi-Fi credentials in `/src/wifi/WiFiMa
 ## Future improvements (suggested)
 
 - Move credentials to secure provisioning flow
-- Align `script.js` behavior with current dashboard HTML
+- Align `script.js` selectors/events with current dashboard IDs and class names in `index.html`
 - Add unit tests under `/test`
 - Split large embedded audio arrays into generated assets or flash-friendly resource handling
 - Add OTA update pipeline and release versioning workflow
