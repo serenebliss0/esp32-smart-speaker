@@ -149,8 +149,8 @@ Control/API routes (`GET`):
 - `/previous`
 - `/volume?v=<0..127>`
 - `/mode?m=<0..3>`
-- `/battery`
-- `/nowplaying`
+- `/battery` → plain text integer battery percent (for example `78`)
+- `/nowplaying` → JSON object with `track` and `artist` fields
 
 ---
 
