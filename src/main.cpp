@@ -45,6 +45,12 @@
 #include "wifi/WiFiManager.h"
 #endif
 
+#ifdef WAVELET_MINI
+#include "wifi/WiFiManager.h"
+#include "spotify_controller/Spotify.h"
+#include "screens/splash/splash.h"
+#endif
+
 #include "Config.h"
 
 Preferences prefs;
