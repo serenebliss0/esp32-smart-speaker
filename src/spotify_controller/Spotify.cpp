@@ -4,7 +4,7 @@
 
 const char* SSID = "";
 const char* PASSWORD = "";
-const char* CLIENT_ID = "09f8277699b4417d94cdf4fe020f7c8d";
+const char* CLIENT_ID = "";
 const char* CLIENT_SECRET = "";
 const char* REFRESH_TOKEN = "";
 
