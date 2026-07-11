@@ -18,8 +18,7 @@ class WaveletApp extends StatefulWidget {
 
 class _WaveletAppState extends State<WaveletApp> {
 
-  ThemeMode _themeMode = ThemeMode.dark; // dark by default
-
+ ThemeMode _themeMode = ThemeMode.system; // was ThemeMode.dark. now takes system default
   void toggleTheme() {
     setState(() {
       _themeMode = _themeMode == ThemeMode.dark

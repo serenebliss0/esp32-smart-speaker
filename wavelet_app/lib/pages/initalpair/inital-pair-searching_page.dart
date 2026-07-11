@@ -1,3 +1,7 @@
+import 'package:Wavelet/pages/initalpair/initial-pair-found-devices_page.dart';
+import 'package:Wavelet/util/device_card.dart';
+import 'package:Wavelet/util/five_step_navigation.dart';
+import 'package:Wavelet/util/progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:Wavelet/theme/colors.dart';
@@ -42,118 +46,122 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: WaveletColors.background(context),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
 
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 71, 24, 8),
-            child: Text(
-              "Find your Wavelet",
-              style: TextStyle(
-                color: WaveletColors.textPrimary(context),
-                fontFamily: 'Nunito',
-                fontSize: 28,
-                fontWeight: FontWeight.w800,
+    body: Column(
+      children: [
+
+        SizedBox(height: 344,),
+        Center(
+          child: Container(
+          width: 64,
+          height: 64,
+          decoration: ShapeDecoration(
+              color: const Color(0x21FF4D6D),
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                      width: 1.60,
+                      color: const Color(0xFFFF4D6D),
+                  ),
+                  borderRadius: BorderRadius.circular(26843500),
               ),
+          ),
+          child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                  Container(
+                      width: 28,
+                      height: 28,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(),
+                      child: Icon(Icons.bluetooth)
+          ,
+                  ),
+              ],
+          ),
+              ),
+        ),
+
+        Padding(
+          padding: const EdgeInsets.only(top: 77, bottom: 31),
+          child: Text(
+            "Make sure your Wavelet is powered on",
+            style: TextStyle(
+              color: WaveletColors.textPrimary(context),
+              fontFamily: 'Inter',
+              fontSize: 14,
+              fontWeight: FontWeight.w400
             ),
           ),
+        ),
 
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
-            child: Text(
-              "Make sure your speaker is powered on and nearby.",
-              style: TextStyle(
-                color: WaveletColors.textSecondary(context),
-                fontFamily: 'Inter',
-                fontSize: 14,
-              ),
-            ),
+      Padding(
+        padding: const EdgeInsets.only(left: 119, right: 119),
+        child: TimedProgressBar(
+            duration: Duration(seconds: 15),
+            onComplete: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => FoundDevices(toggleTheme: () {
+                  
+                },)),
+              );
+            },
           ),
-
-          // scanning indicator
-          if (isScanning)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 14,
-                    height: 14,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: WaveletColors.primary(context),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    "Scanning...",
-                    style: TextStyle(
-                      color: WaveletColors.textSecondary(context),
-                      fontFamily: 'Inter',
-                      fontSize: 13,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-          SizedBox(height: 16),
-
-          // device list
-          Expanded(
-            child: devices.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.speaker, 
-                        color: WaveletColors.textDisabled(context), 
-                        size: 48),
-                      SizedBox(height: 12),
-                      Text(
-                        isScanning 
-                          ? "Looking for speakers..." 
-                          : "No speakers found",
-                        style: TextStyle(
-                          color: WaveletColors.textDisabled(context),
-                          fontFamily: 'Inter',
-                          fontSize: 14,
-                        ),
-                      ),
-                      if (!isScanning) ...[
-                        SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: startScanning,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: WaveletColors.primaryButton(context),
-                            foregroundColor: WaveletColors.primaryButtonText(context),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: Text("Scan again"),
-                        ),
-                      ]
-                    ],
-                  ),
-                )
-              : ListView.separated(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
-                  itemCount: devices.length,
-                  separatorBuilder: (_, __) => SizedBox(height: 12),
-                  itemBuilder: (context, index) {
-                    final device = devices[index];
-                    return DeviceCard(
-                      device: device,
-                      toggleTheme: widget.toggleTheme,
-                    );
-                  },
-                ),
-          ),
-        ],
       ),
+
+        SizedBox(height: 230,),
+
+        FiveStepNavigation(position: 2),
+
+        SizedBox(height: 24,),
+
+
+//disabled button i added : )
+        Container(
+          width: 350,
+          height: 52,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          decoration: ShapeDecoration(
+              color: WaveletColors.disabledButton(context) /* Color-System-Buttons-Disabled-Button */,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+              ),
+              shadows: [
+                  BoxShadow(
+                      color: Color(0x44FF4D6D),
+                      blurRadius: 20,
+                      offset: Offset(0, 4),
+                      spreadRadius: 0,
+                  )
+              ],
+          ),
+          child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              spacing: 8,
+              children: [
+                  Text(
+                      'Continue',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: WaveletColors.disabledButtonText(context) /* Color-System-Buttons-Disabled-Button-Text */,
+                          fontSize: 14,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w700,
+                          height: 1.43,
+                      ),
+                  ),
+              ],
+          ),
+      )
+
+      ], //end of column
+    ),
+ 
+
     );
   }
-}
+  }

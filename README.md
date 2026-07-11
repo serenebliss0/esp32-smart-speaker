@@ -219,3 +219,9 @@ NVS via `Preferences.h`:
 /webpage-screenshots        Visual reference captures
 /include /lib /test         Default PlatformIO folders
 ```
+
+## Figma Designs
+
+[Figma Designs](https://www.figma.com/design/wSVdh18lgMXjiUBImJqQXe/Wavelet-Mini--Max-UI-Design?node-id=23-192&t=HQhf0RkUaCa5WT77-1)
+
+Contains all the UI iterations across every model
