@@ -239,8 +239,8 @@ Padding(
             //changes for each model
             builder: (_) => MiniQrScanPage(
               toggleTheme: widget.toggleTheme,
-              ssid: selectedSSID!,
-              password: password,
+              //ssid: selectedSSID!,
+              //password: password,
               pageStep: 4,
             ),
           ));

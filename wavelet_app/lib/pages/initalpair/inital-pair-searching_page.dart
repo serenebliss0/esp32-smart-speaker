@@ -16,32 +16,39 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  List<ScanResult> devices = [];
+  // List<ScanResult> devices = [];
   bool isScanning = false;
+
+  List<ScanResult> foundDevices = [];
 
   @override
   void initState() {
     super.initState();
-    startScanning();
-  }
-
-  void startScanning() {
-    setState(() => isScanning = true);
-
-    BleScanner.startScan().listen((results) {
-      setState(() => devices = results);
-    });
-
-    Future.delayed(Duration(seconds: 10), () {
-      if (mounted) setState(() => isScanning = false);
+    BleScanner.scan().listen((results) {
+      setState(() => foundDevices = results);
     });
   }
 
   @override
   void dispose() {
-    BleScanner.stopScan();
+    BleScanner.stop();
     super.dispose();
   }
+
+  void goToResults() {
+    BleScanner.stop();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => FoundDevices(
+          toggleTheme: widget.toggleTheme,
+          devices: foundDevices,
+        ),
+      ),
+    );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -103,15 +110,28 @@ class _SearchPageState extends State<SearchPage> {
             onComplete: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (_) => FoundDevices(toggleTheme: () {
-                  
-                },)),
+                MaterialPageRoute(builder: (_) => FoundDevices(toggleTheme: () {}, devices: foundDevices,)),
               );
             },
           ),
       ),
 
-        SizedBox(height: 230,),
+      SizedBox(height: 10,),
+
+         // live found count
+          Text(
+            foundDevices.isEmpty
+              ? "Looking..."
+              : "Found ${foundDevices.length} speaker${foundDevices.length > 1 ? 's' : ''}",
+            style: TextStyle(
+              color: WaveletColors.primary(context),
+              fontFamily: 'Inter',
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+
+        SizedBox(height: 220,),
 
         FiveStepNavigation(position: 2),
 

@@ -8,11 +8,14 @@ import 'package:Wavelet/util/device_card.dart';
 import 'package:Wavelet/util/five_step_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:Wavelet/theme/colors.dart';
-import 'package:Wavelet/pages/initalpair/inital-pair-searching_page.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:Wavelet/util/function/ble_scanner.dart';
 
 class FoundDevices extends StatelessWidget {
-  const FoundDevices({super.key, required this.toggleTheme});
+  const FoundDevices({super.key, required this.toggleTheme, required this.devices});
   final VoidCallback toggleTheme;
+
+  final List<ScanResult> devices;
 
   // dummy devices for now, will be replaced with real BLE results
   final List<Map<String, String>> mockDevices = const [
@@ -79,52 +82,45 @@ class FoundDevices extends StatelessWidget {
     },
   ];
 
-  void handleDeviceTap(BuildContext context, Map<String, String> device) {
-  final model = device["model"]!;
+  void handleDeviceTap(BuildContext context, ScanResult result) {
 
-  switch (model) {
-    case "mini":
-      Navigator.push(context, MaterialPageRoute(
-        builder: (_) => MiniWifiPage(
-          toggleTheme: toggleTheme,
-          deviceName: device["name"]!,
-          pageStep: 4,
-        ),
-      ));
-      break;
+    final model  = BleScanner.extractModel(result.device.platformName);
+    final device = result.device;
+  // final model = device["model"]!;
 
-    case "max":
-      Navigator.push(context, MaterialPageRoute(
-        builder: (_) => MaxWifiPage(
-          toggleTheme: toggleTheme,
-          deviceName: device["name"]!,
-          pageStep: 4,
-        ),
-      ));
-      break;
+     switch (model) {
+      case "mini":
+        Navigator.push(context, MaterialPageRoute(
+          builder: (_) => MiniQrScanPage(
+            toggleTheme: toggleTheme,
+            pageStep: 4,
 
-//change back to commented ver
+            //deviceName: device,
+          ),
+        ));
+        break;
+
+      case "max":
+        Navigator.push(context, MaterialPageRoute(
+          builder: (_) => MaxWifiPage(
+            toggleTheme: toggleTheme,
+            deviceName: device.toString(),
+            pageStep: 4,
+          ),
+        ));
+        break;
+
       case "regular":
-      Navigator.push(context, MaterialPageRoute(
-        builder: (_) => FinishedPairPage(
-          //toggleTheme: toggleTheme,
-          userDeviceName: device["name"]!,
-          //model: "regular",
-        ),
-      ));
-      break;
-
-    // case "regular":
-    //   Navigator.push(context, MaterialPageRoute(
-    //     builder: (_) => NameDevicePage(
-    //       toggleTheme: toggleTheme,
-    //       deviceName: device["name"]!,
-    //       model: "regular",
-    //     ),
-    //   ));
-    //   break;
+        Navigator.push(context, MaterialPageRoute(
+          builder: (_) => NameDevicePage(
+            toggleTheme: toggleTheme,
+            deviceName: device.toString(),
+            model: model,
+          ),
+        ));
+        break;
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +159,7 @@ class FoundDevices extends StatelessWidget {
           // device list
           Expanded(
 
-            child: mockDevices.isEmpty
+            child: devices.isEmpty
               ? 
               //device list is empty: no devices found
               Center(
@@ -208,16 +204,16 @@ class FoundDevices extends StatelessWidget {
                 //value if devices found
               : ListView.separated(
                   padding: EdgeInsets.symmetric(horizontal: 24),
-                  itemCount: mockDevices.length,
+                  itemCount: devices.length,
                   separatorBuilder: (_, __) => SizedBox(height: 32),
                   itemBuilder: (context, index) {
-                    final d = mockDevices[index];
+                    final result = devices[index];
                     return DeviceCard(
-                      deviceName: d["name"]!,
-                      deviceModel: d["model"]!,
-                      signalStrength: d["signal"]!,
-                      deviceImage: d["image"]!,
-                      onTap: () => handleDeviceTap(context, d), // add this
+                      deviceName: result.device.platformName,
+                      deviceModel: BleScanner.extractModel(result.device.platformName),
+                      signalStrength: BleScanner.signalLabel(result.rssi),
+                      deviceImage: 'assets/images/spk-temp.png',
+                      onTap: () => handleDeviceTap(context, result),
                     );
                   },
                 ),

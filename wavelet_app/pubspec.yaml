@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+    mobile_scanner: ^7.1.2
     wifi_scan: ^0.4.1
     wifi_iot: ^0.3.19
     flutter_blue_plus: ^1.35.3
