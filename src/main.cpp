@@ -49,6 +49,8 @@
 #include "wifi/WiFiManager.h"
 #include "spotify_controller/Spotify.h"
 #include "screens/splash/splash.h"
+#include "mini-ble/BLEManager.h"
+#include "screens/qr_setup.h"
 #endif
 
 #include "Config.h"
@@ -101,32 +103,27 @@ void setup() {
     pinMode(Config::PAUSE_BUTTON, INPUT_PULLUP);
     
     #endif
-  /*
-      // Initialize BLE for battery level
-  BLEDevice::init("Serenity's ESP32");
-  BLEServer* pServer = BLEDevice::createServer();
-  BLEService* pService = pServer->createService(BATTERY_SERVICE_UUID);
 
-  batteryCharacteristic = pService->createCharacteristic(
-    BATTERY_CHAR_UUID,
-    BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY
-  );
+    //wavelet mini setup proc
+    #ifdef WAVELET_MINI  
+    Preferences prefs;
+    prefs.begin("wavelet", true);
+    bool setupDone = prefs.getBool("setup_done", false);
+    prefs.end();
 
-  batteryCharacteristic->addDescriptor(new BLE2902()); // enable notifications
-  pService->start();
-
-  BLEAdvertising* pAdvertising = BLEDevice::getAdvertising();
-  pAdvertising->addServiceUUID(BATTERY_SERVICE_UUID);
-  pAdvertising->start();
-  
-  */
-
-  //
+    // //debug only, negate logic in prod
+    if (!setupDone) {
+        //showSetupQR("WVL-2A4F9C", "strawberry_pink", lv_scr_act());
+        beginSetupMode("max", "strawberry_pink");
+        printQRToSerial(buildQRPayload("max", "pink"));
+    }
+    #endif
 
     #ifdef DEBUG
     String mac_addr = WiFi.macAddress();
     Serial.println(WiFi.macAddress());
     #endif
+    
     //esp_bt_controller_mem_release(ESP_BT_MODE_BLE);
 
     i2s_pin_config_t my_pins = {
