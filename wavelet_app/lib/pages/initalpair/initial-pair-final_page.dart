@@ -7,10 +7,13 @@ FinishedPairPage({
     
     super.key,
     required this.userDeviceName,
+    required this.toggleTheme
     
     });
 
     String userDeviceName;
+    final VoidCallback toggleTheme;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,3 +1,4 @@
+import 'package:Wavelet/pages/initalpair/initial-pair-final_page.dart';
 import 'package:Wavelet/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:Wavelet/theme/colors.dart';
@@ -31,10 +32,53 @@ class _HomePageState extends State<HomePage> {
           },)),
 );
         }),
+
+        SizedBox(height: 200),
+
+                FloatingActionButton(onPressed: (){
+          Navigator.pop(context);
+          Navigator.push(
+            context,
+          MaterialPageRoute(builder: (_) => FinishedPairPage(toggleTheme: () {
+            
+          },
+          userDeviceName: "Wavelet Test",
+
+          )
+          ),
+);
+        }),
+
         ],
         // alignment: Alignment.center,
 
       ),
+
+bottomNavigationBar: NavigationBar(
+    //selectedIndex: currentIndex,
+    onDestinationSelected: (index) {
+      //setState(() => currentIndex = index);
+    },
+    destinations: const [
+      NavigationDestination(
+        icon: Icon(Icons.home_outlined),
+        selectedIcon: Icon(Icons.home),
+        label: 'Home',
+      ),
+      NavigationDestination(
+        icon: Icon(Icons.speaker_outlined),
+        selectedIcon: Icon(Icons.speaker),
+        label: 'Devices',
+      ),
+      NavigationDestination(
+        icon: Icon(Icons.settings_outlined),
+        selectedIcon: Icon(Icons.settings),
+        label: 'Settings',
+      ),
+    ],
+  ),
+
+
     );
   }
 }
